@@ -22,17 +22,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
@@ -42,17 +41,21 @@ public class MainActivity extends Activity {
 	WeaponDataSource datasourceWeapon;
 	TypeDataSource datasourceType;
 	Spinner sp;
+	int spPos = 0;
 	List<Weapon> weapons;
 	List<Weapon> weapons2;
 	TableLayout table;
 	ProgressDialog dialog;
+	RadioGroup radioGrp;
+	int selectedRadio;
+	//String rbText = WeaponsDBOpenHelper.COLUMN_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_main); 
-        deleteDB();  // TO CLEAR DB AND START OVER
+        //deleteDB();  // TO CLEAR DB AND START OVER
 
         Parse.initialize(this, "KOHAaQRdCYXrO1RNBYF3iTSOoxrgTfXRsFUpMdhN", "P3BgADyELTJe2ZyJFUs5cqabAagdVtg517VG2YHf"); 
 		ParseAnalytics.trackAppOpened(getIntent());
@@ -68,11 +71,11 @@ public class MainActivity extends Activity {
         dialog.setIndeterminate(true);
         
         // Check to see if there are and Weapons in the list
-        weapons = datasourceWeapon.findAll();
+        weapons = datasourceWeapon.findAllNoFilter();
         if(weapons.size() == 0){
         	getParseTable();
         }
-        weapons2 = datasourceWeapon.filterbyType(1);
+        weapons2 = datasourceWeapon.filterbyTypeSortby(1, "weaponID");
         Log.i(TAG, "WEAPONS 2 SIZE: " + String.valueOf(weapons2.size()));
  
         // Check to see if there are any Types in the Weapon Types list
@@ -85,11 +88,32 @@ public class MainActivity extends Activity {
         table = (TableLayout) findViewById(R.id.tableLoyout);
         //ArrayAdapter<Weapon> weaponListAdapter = new ArrayAdapter<Weapon>(this, R.layout.custom_cell, weapons);
         
-        
+        radioGrp = (RadioGroup)findViewById(R.id.radioGrp);
+        radioGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+          public void onCheckedChanged(RadioGroup arg0, int id) {
+            switch (id) {
+            case R.id.radioNone:
+              Log.i(TAG, "ID");
+              MoveRadioUpdate(spPos, "ID");
+              break;
+            case R.id.radioDamage:
+              Log.i(TAG, "DMG");
+              MoveRadioUpdate(spPos, "Damage");
+              break;
+            case R.id.radioAlpha:
+              Log.i(TAG, "ALPHA");
+              MoveRadioUpdate(spPos, "Alpha");
+              break;
+            default:
+              Log.i(TAG, "Huh?");
+              break;
+            }
+          }
+        });
         
         buildSpinner();
         
-       // buildParseData();  // to auto fill parse
+       // buildParseData();  // TO AUTO FILL PARSE.COM
         
     } // END onCreate
     
@@ -109,7 +133,7 @@ public class MainActivity extends Activity {
     private void resetWindow(){
 		table.removeAllViews();  // clear table views
 		sp.setSelection(0);  // reset Spinner to all
-		weapons = datasourceWeapon.findAll();  // reset data to all
+		weapons = datasourceWeapon.preFilterALL("weaponID");  // reset data to all
         tableBuilder();  // rebuild table with all data
     }
     
@@ -158,37 +182,39 @@ public class MainActivity extends Activity {
 	   
 	   
 	   //////  TABLE DATA  //////
-	   for(int i = 0; i < weapons.size(); i++){
-		   Weapon wpn = weapons.get(i);
-		   
-		   LayoutParams params = new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f);
-		   LayoutParams params2 = new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 2f);
-		   // create a new TableRow
-		   TableRow row = new TableRow(this);
-		   
-		   // create a new TextView
-		   
-		   TextView t1 = new TextView(this);
-		   		t1.setLayoutParams(params);
-		   TextView t2 = new TextView(this);
-		   		t2.setLayoutParams(params2);
-		   TextView t3 = new TextView(this);
-		   		t3.setLayoutParams(params);
-		   TextView t4 = new TextView(this);
-		   		t4.setLayoutParams(params);
-		   TextView t5 = new TextView(this);
-		   		t5.setLayoutParams(params);
-		   TextView t6 = new TextView(this);
-		   		t6.setLayoutParams(params);
+	   
 
+		for (int i = 0; i < weapons.size(); i++) {
+			Weapon wpn = weapons.get(i);
 
-			t1.setText(String.valueOf(wpn.getId()));		
+			LayoutParams params = new TableRow.LayoutParams(0,
+					LayoutParams.WRAP_CONTENT, 1f);
+			LayoutParams params2 = new TableRow.LayoutParams(0,
+					LayoutParams.WRAP_CONTENT, 2f);
+			// create a new TableRow
+			TableRow row = new TableRow(this);
+
+			// create a new TextView
+
+			TextView t1 = new TextView(this);
+			t1.setLayoutParams(params);
+			TextView t2 = new TextView(this);
+			t2.setLayoutParams(params2);
+			TextView t3 = new TextView(this);
+			t3.setLayoutParams(params);
+			TextView t4 = new TextView(this);
+			t4.setLayoutParams(params);
+			TextView t5 = new TextView(this);
+			t5.setLayoutParams(params);
+			TextView t6 = new TextView(this);
+			t6.setLayoutParams(params);
+
+			t1.setText(String.valueOf(wpn.getId()));
 			t2.setText(wpn.getName());
 			t3.setText(String.valueOf(wpn.getType()));
 			t4.setText(String.valueOf(wpn.getHands()));
 			t5.setText(String.valueOf(wpn.getDamage()));
 			t6.setText(String.valueOf(wpn.getQuantity()));
-
 
 			// add the TextView and the CheckBox to the new TableRow
 			row.addView(t1);
@@ -197,11 +223,12 @@ public class MainActivity extends Activity {
 			row.addView(t4);
 			row.addView(t5);
 			row.addView(t6);
-							
-					
+
 			// add the TableRow to the TableLayout
-			table.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-	   }    
+			table.addView(row, new TableLayout.LayoutParams(
+					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		}
+
    };
   
 
@@ -214,39 +241,44 @@ public class MainActivity extends Activity {
     	    @Override
     	    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
     	    	String item = sp.getItemAtPosition(position).toString();
-    	     
-    	    	    //Toast.makeText(sp.getContext(), "You selected Type: " + item,
+    	    	spPos = position;
+    	    	selectedRadio = radioGrp.getCheckedRadioButtonId();
+    	    	Log.i(TAG, "onItemSeleted Spinner: " + item);
+    	    	RadioButton rb = (RadioButton) findViewById(selectedRadio);
+    	    	String rbText = (String) rb.getText();
+    	    	Log.i(TAG, "onItemSeleted Spinner: " + rbText);
+    	    	    //Toast.makeText(sp.getContext(), "You selected Radio: " + rb.getText(),
     	    	    		
    	    	        //Toast.LENGTH_LONG).show();
     	    	    
     	    	    switch(position){
 
     	    	    case 0: 
-    	    	    	weapons = datasourceWeapon.findAll();
+    	    	    	weapons = datasourceWeapon.findAllNoFilter();
     	    	    	table.removeAllViews();
     	    	    	tableBuilder();
     	    	        break;
 
     	    	    case 1:
-    	    	    	weapons = datasourceWeapon.filterbyType(1);
+    	    	    	weapons = datasourceWeapon.preFilterByType(1, rbText);
     	    	    	table.removeAllViews();
     	    	    	tableBuilder();
     	    	        break;
     	    	         
     	    	    case 2:
-    	    	    	weapons = datasourceWeapon.filterbyType(2);
+    	    	    	weapons = datasourceWeapon.preFilterByType(2, rbText);
     	    	    	table.removeAllViews();
     	    	    	tableBuilder();
    	    	         	break;
    	    	         
     	    	    case 3:
-    	    	    	weapons = datasourceWeapon.filterbyType(3);
+    	    	    	weapons = datasourceWeapon.preFilterByType(3, rbText);
     	    	    	table.removeAllViews();
     	    	    	tableBuilder();
    	    	         	break;
    	    	         	
     	    	    case 4:
-    	    	    	weapons = datasourceWeapon.filterbyType(4);
+    	    	    	weapons = datasourceWeapon.preFilterByType(4, rbText);
     	    	    	table.removeAllViews();
     	    	    	tableBuilder();
    	    	         	break;
@@ -392,6 +424,46 @@ public class MainActivity extends Activity {
     					}
     				});
     	}  // END getParseTable
+    
+    private void MoveRadioUpdate(int pos, String sort){
+    	switch(pos){
+
+	    case 0: 
+	    	Log.i(TAG, "Radio Updated to: " + sort);
+	    	weapons = datasourceWeapon.preFilterALL(sort);
+	    	table.removeAllViews();
+	    	tableBuilder();
+	        break;
+
+	    case 1:
+	    	Log.i(TAG, "Radio Updated to: " + sort);
+	    	weapons = datasourceWeapon.preFilterByType(1, sort);
+	    	table.removeAllViews();
+	    	tableBuilder();
+	        break;
+	         
+	    case 2:
+	    	Log.i(TAG, "Radio Updated to: " + sort);
+	    	weapons = datasourceWeapon.preFilterByType(2, sort);
+	    	table.removeAllViews();
+	    	tableBuilder();
+	        break;
+	         
+	    case 3:
+	    	Log.i(TAG, "Radio Updated to: " + sort);
+	    	weapons = datasourceWeapon.preFilterByType(3, sort);
+	    	table.removeAllViews();
+	    	tableBuilder();
+	        break;
+	         	
+	    case 4:
+	    	Log.i(TAG, "Radio Updated to: " + sort);
+	    	weapons = datasourceWeapon.preFilterByType(3, sort);
+	    	table.removeAllViews();
+	    	tableBuilder();
+	        break;
+	    }
+    }
     	
    
 }
