@@ -14,10 +14,13 @@
         android:id="@+id/tableLoyout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-
-
-
-
     </TableLayout>
+
+    <Button
+        android:id="@+id/btnRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Refresh" />
 
 </LinearLayout>

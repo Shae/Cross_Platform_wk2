@@ -23,7 +23,8 @@ public class WeaponDataSource {
 		WeaponsDBOpenHelper.COLUMN_NAME,
 		WeaponsDBOpenHelper.COLUMN_TYPE,
 		WeaponsDBOpenHelper.COLUMN_HANDS,
-		WeaponsDBOpenHelper.COLUMN_DAMAGE
+		WeaponsDBOpenHelper.COLUMN_DAMAGE,
+		WeaponsDBOpenHelper.COLUMN_QUANTITY,
 	};
 	
 	public WeaponDataSource(Context context){
@@ -43,10 +44,18 @@ public class WeaponDataSource {
 	
 	public Weapon create(Weapon weapon){
 		ContentValues values = new ContentValues();
+		values.put(WeaponsDBOpenHelper.COLUMN_ID, weapon.getId());
+		Log.i(TAG, "Create ID : " + String.valueOf(weapon.getId()));
 		values.put(WeaponsDBOpenHelper.COLUMN_NAME, weapon.getName());
+		Log.i(TAG, "Create NAME : " + weapon.getName());
 		values.put(WeaponsDBOpenHelper.COLUMN_TYPE, weapon.getType());
+		Log.i(TAG, "Create TYPE : " + String.valueOf(weapon.getType()));
 		values.put(WeaponsDBOpenHelper.COLUMN_HANDS, weapon.getHands());
+		Log.i(TAG, "Create HANDS : " + String.valueOf(weapon.getHands()));
 		values.put(WeaponsDBOpenHelper.COLUMN_DAMAGE, weapon.getDamage());
+		Log.i(TAG, "Create DAMAGE : " + String.valueOf(weapon.getDamage()));
+		values.put(WeaponsDBOpenHelper.COLUMN_QUANTITY, weapon.getQuantity());
+		Log.i(TAG, "Create QUANTITY : " + String.valueOf(weapon.getQuantity()));
 		long insertid = database.insert(WeaponsDBOpenHelper.TABLE_WEAPONS, null, values); // GET AUTO ID
 		
 		weapon.setId(insertid); // SET the ID of the new weapon with the Auto generated one
@@ -68,6 +77,8 @@ public class WeaponDataSource {
 				weapon.setType(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_TYPE)));
 				weapon.setHands(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_HANDS)));
 				weapon.setDamage(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_DAMAGE)));
+				weapon.setQuantity(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_QUANTITY)));
+				Log.i(TAG, "findAll quantity call : " + c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_QUANTITY)));
 				weapons.add(weapon);
 			}
 		}
@@ -98,6 +109,7 @@ public class WeaponDataSource {
 				weapon.setType(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_TYPE)));
 				weapon.setHands(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_HANDS)));
 				weapon.setDamage(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_DAMAGE)));
+				weapon.setQuantity(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_QUANTITY)));
 				weaponsByType.add(weapon);
 				Log.i(TAG, weapon.getName());
 			}

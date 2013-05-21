@@ -11,12 +11,13 @@ public class WeaponsDBOpenHelper extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "weapons.db";
 	private static final int DATABASE_VERSION = 1;
 	
-	public static final String TABLE_WEAPONS = "weapons";
+	public static final String TABLE_WEAPONS = "wpnsTable";
 	public static final String COLUMN_ID = "weaponID";
 	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_TYPE = "type";
 	public static final String COLUMN_HANDS = "hands";
 	public static final String COLUMN_DAMAGE = "damage";
+	public static final String COLUMN_QUANTITY = "quantity";
 	
 	public static final String TABLE_TYPES = "types";
 	public static final String COLUMN_TYPE_ID = "typeID";
@@ -28,7 +29,8 @@ public class WeaponsDBOpenHelper extends SQLiteOpenHelper {
 			COLUMN_NAME + " TEXT NOT NULL, " +
 			COLUMN_TYPE + " INTEGER NOT NULL, " +
 			COLUMN_HANDS + " INTEGER NOT NULL, " +
-			COLUMN_DAMAGE + " INTEGER NOT NULL " +
+			COLUMN_DAMAGE + " INTEGER NOT NULL, " +
+			COLUMN_QUANTITY + " INTERGER NOT NULL " +
 			")";
 			
 	private static final String TABLE_CREATE_TYPE = "CREATE TABLE " + TABLE_TYPES + " (" +
@@ -44,7 +46,7 @@ public class WeaponsDBOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(TABLE_CREATE_TYPE);
-		Log.i(TAG, TABLE_TYPES + "Table has been created");
+		Log.i(TAG, TABLE_TYPES + " Table has been created");
 		
 		db.execSQL(TABLE_CREATE);
 		Log.i(TAG, DATABASE_NAME + "Table has been created");
