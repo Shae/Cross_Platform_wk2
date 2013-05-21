@@ -1,6 +1,5 @@
 package com.klusman.cross_platform_wk2;
 
-import android.util.Log;
 
 public class Weapon {
 	 	public long id;
@@ -9,7 +8,7 @@ public class Weapon {
 	    public int hands;
 	    public int damage;
 	    public int quantity;
-	    private static final String TAG = "WEAPONS_DATABASE";
+
 	    
 //////////////	    
 	    public long getId(){
@@ -27,7 +26,6 @@ public class Weapon {
 	    }
 	    
 	    public void setName(String name){
-	    	Log.i(TAG, "WEAPON CLASS setNAME : " + String.valueOf(name));
 	    	this.name = name;
 	    }
 	    
@@ -64,7 +62,6 @@ public class Weapon {
 	    }
 	    
 	    public void setQuantity(int quantity){
-	    	Log.i(TAG, "WEAPON CLASS quantity : " + String.valueOf(quantity));
 	    	this.quantity = quantity;
 	    }
 }  // END WEAPON CLASS

@@ -16,6 +16,7 @@ import com.parse.ParseQuery;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -44,13 +45,14 @@ public class MainActivity extends Activity {
 	List<Weapon> weapons;
 	List<Weapon> weapons2;
 	TableLayout table;
+	ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_main); 
-        // deleteDB();  // TO CLEAR DB AND START OVER
+        deleteDB();  // TO CLEAR DB AND START OVER
 
         Parse.initialize(this, "KOHAaQRdCYXrO1RNBYF3iTSOoxrgTfXRsFUpMdhN", "P3BgADyELTJe2ZyJFUs5cqabAagdVtg517VG2YHf"); 
 		ParseAnalytics.trackAppOpened(getIntent());
@@ -60,6 +62,10 @@ public class MainActivity extends Activity {
         datasourceWeapon = new WeaponDataSource(this);
         datasourceWeapon.open();
         
+        dialog = new ProgressDialog(this);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage("Updating Inventory. Please wait...");
+        dialog.setIndeterminate(true);
         
         // Check to see if there are and Weapons in the list
         weapons = datasourceWeapon.findAll();
@@ -80,17 +86,7 @@ public class MainActivity extends Activity {
         //ArrayAdapter<Weapon> weaponListAdapter = new ArrayAdapter<Weapon>(this, R.layout.custom_cell, weapons);
         
         
-        Button b = (Button)findViewById(R.id.btnRefresh);
-        b.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				table.removeAllViews();  // clear table views
-				sp.setSelection(0);  // reset Spinner to all
-				weapons = datasourceWeapon.findAll();  // reset data to all
-		        tableBuilder();  // rebuild table with all data
-			}
-		});
+        
         buildSpinner();
         
        // buildParseData();  // to auto fill parse
@@ -110,16 +106,24 @@ public class MainActivity extends Activity {
 		wepObject.saveInBackground();
     }
     
+    private void resetWindow(){
+		table.removeAllViews();  // clear table views
+		sp.setSelection(0);  // reset Spinner to all
+		weapons = datasourceWeapon.findAll();  // reset data to all
+        tableBuilder();  // rebuild table with all data
+    }
+    
     private void deleteDB(){
     	this.deleteDatabase(WeaponsDBOpenHelper.DATABASE_NAME);
-    	Log.i(TAG, "DB DELETED");
+    	Log.i(TAG, "DATABASE DELETED AS REQUESTED : LINE 53");
     }
     
    private void tableBuilder(){
 	   	table = (TableLayout) findViewById(R.id.tableLoyout);
-	   	Log.i(TAG, "Weapon list size: " + String.valueOf(weapons.size()));
+	   	//Log.i(TAG, "Weapon list size: " + String.valueOf(weapons.size()));
 	   	LayoutParams T_params = new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f);
 	   	LayoutParams T_params2 = new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 2f);
+	   	
 	   
 	   /////  TITLE ROW  /////
 	   	TableRow titlerow = new TableRow(this);
@@ -211,9 +215,9 @@ public class MainActivity extends Activity {
     	    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
     	    	String item = sp.getItemAtPosition(position).toString();
     	     
-    	    	    Toast.makeText(sp.getContext(), "You selected Type: " + item,
+    	    	    //Toast.makeText(sp.getContext(), "You selected Type: " + item,
     	    	    		
-   	    	        Toast.LENGTH_LONG).show();
+   	    	        //Toast.LENGTH_LONG).show();
     	    	    
     	    	    switch(position){
 
@@ -298,22 +302,22 @@ public class MainActivity extends Activity {
     	WeaponType type = new WeaponType();
     	type.setName("SWORD");
     	type = datasourceType.create(type);
-    	Log.i(TAG, "Type created with id: " + type.getId() + " named: " + type.getName());
+    	//Log.i(TAG, "Type created with id: " + type.getId() + " named: " + type.getName());
     	
     	type = new WeaponType();
     	type.setName("AXE");
     	type = datasourceType.create(type);
-    	Log.i(TAG, "Type created with id: " + type.getId() + " named: " + type.getName());
+    	//Log.i(TAG, "Type created with id: " + type.getId() + " named: " + type.getName());
     	
     	type = new WeaponType();
     	type.setName("FLAIL");
     	type = datasourceType.create(type);
-    	Log.i(TAG, "Type created with id: " + type.getId() + " named: " + type.getName());
+    	//Log.i(TAG, "Type created with id: " + type.getId() + " named: " + type.getName());
     	
     	type = new WeaponType();
     	type.setName("MISSLE");
     	type = datasourceType.create(type);
-    	Log.i(TAG, "Type created with id: " + type.getId() + " named: " + type.getName());
+    	//Log.i(TAG, "Type created with id: " + type.getId() + " named: " + type.getName());
     }
     
     
@@ -339,6 +343,7 @@ public class MainActivity extends Activity {
     
     private void getParseTable(){
     	//Log.i(TAG, "OBJECT ID TEST : Step1");
+    	dialog.show();
     		ParseQuery query = new ParseQuery("weaponsTable");
     		query.findInBackground(
     				
@@ -349,7 +354,7 @@ public class MainActivity extends Activity {
     						if (e == null) {
     							//Log.i(TAG, "OBJECT ID TEST : Step2");
     							int x = objects.size();
-
+    							
     							for ( int i = 0; i < x; i++){  // Sending Object ID's to kids list
     								Log.i(TAG, "OBJECT BUILD");
     								//String o = objects.get(i).getObjectId().toString();  // to get the actual parse OBJECT ID
@@ -366,8 +371,6 @@ public class MainActivity extends Activity {
     								int quantity = (Integer) objects.get(i).get("wQuantity");
     								//Log.i(TAG, String.valueOf(quantity));
     								
-    								 
-    							
     								Weapon weapon = new Weapon();
     								weapon.setId(_id);
     						    	weapon.setName(name);
@@ -376,23 +379,18 @@ public class MainActivity extends Activity {
     						    	weapon.setDamage(damage);
     						    	weapon.setQuantity(quantity);
     						    	weapon = datasourceWeapon.create(weapon);
-    						    	
-    						    	Log.i(TAG, "Weapons created with id " + name);
-    						    	
-    						    	if(i >= x){
-    						    		Log.i(TAG, "PULL COMPLETE" );
-    						    	}
-    							} // END FOR LOOP
+    						    	//Log.i(TAG, "Weapons created with id " + name);
 
+    							} // END FOR LOOP
+    							
     						} else {
-    						//	Log.i(TAG, "OBJECT ID TEST : Step2 error");
     							String ee = e.toString();
     							Log.i("ERROR from PARSE", ee);
     						}  // END IF
-
+    						resetWindow();
+    						dialog.dismiss();
     					}
     				});
-    		
     	}  // END getParseTable
     	
    

@@ -53,7 +53,7 @@ public class TypeDataSource {
 	
 	public List<String> buildTypeArray(){
 		Cursor c = database.query(WeaponsDBOpenHelper.TABLE_TYPES, nameColumn, null, null, null, null, null);
-		Log.i(TAG, "tArray Returned " + c.getCount() + " rows");
+		//Log.i(TAG, "tArray Returned " + c.getCount() + " rows");
 		
 		 
         List<String> types = new ArrayList<String>();
@@ -61,7 +61,7 @@ public class TypeDataSource {
         if(c.getCount() > 0){
         	while(c.moveToNext()){
         		types.add(c.getString(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_TYPE_NAME)));
-        		Log.i(TAG, "LIST ITEM: " + c.getString(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_TYPE_NAME)));
+        		//Log.i(TAG, "LIST ITEM: " + c.getString(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_TYPE_NAME)));
 
         	}
         }
@@ -73,7 +73,7 @@ public class TypeDataSource {
 	public List<WeaponType> findAll(){
 		List<WeaponType> types = new ArrayList<WeaponType>();
 		Cursor c = database.query(WeaponsDBOpenHelper.TABLE_TYPES, allColumns, null, null, null, null, null);
-		Log.i(TAG, "Types List Returned " + c.getCount() + " rows");
+		//Log.i(TAG, "Types List Returned " + c.getCount() + " rows");
 		
 		if(c.getCount() > 0){
 			while(c.moveToNext()){
@@ -81,7 +81,7 @@ public class TypeDataSource {
 				type.setId(c.getLong(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_TYPE_ID)));
 				type.setName(c.getString(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_TYPE_NAME)));
 				types.add(type);
-				Log.i(TAG, type.getName());
+				//Log.i(TAG, type.getName());
 			}
 		}
 		return types;
