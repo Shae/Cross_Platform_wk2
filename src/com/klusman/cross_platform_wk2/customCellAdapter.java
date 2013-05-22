@@ -16,6 +16,12 @@ public class customCellAdapter extends BaseAdapter {
 
 		private JSONArray items;
 	    private Context context;
+        TextView Title;
+        TextView Hands;
+        TextView Type;
+        TextView Damage;
+        TextView ID;
+        TextView Quantity;
 	    
 	    
 	    public customCellAdapter(Context context, JSONArray array)
@@ -43,36 +49,33 @@ public class customCellAdapter extends BaseAdapter {
 	    public View getView(int position, View convertView, ViewGroup parent) 
 	    {
 	        View v = convertView;
-	        TextView Title;
-	        TextView Hands;
-	        TextView Type;
-	        TextView Damage;
-	        TextView ID;
+
 	        //Log.i("LISTVIEW", "Checking Position" + position);
-	        
-	        
-	        
-	        
 	        try
 	        {       
 	            if(!items.isNull(position))
 	            {
 	                JSONObject item = items.getJSONObject(position);
 	                if (v == null) {
-	                    v = LayoutInflater.from(context).inflate(R.layout.custom_cell, null);
+	                    v = LayoutInflater.from(context).inflate(R.layout.cell_custom_weapon, null);
 	                }           
 	                
-	                Title = (TextView) v.findViewById(R.id.WeaponName);
-	                Hands = (TextView) v.findViewById(R.id.hands);
-	                Type = (TextView) v.findViewById(R.id.type);
-	                ID = (TextView) v.findViewById(R.id.id);
-	                Damage = (TextView) v.findViewById(R.id.damage);
+	                Title = (TextView) v.findViewById(R.id.tvWepName);
+	                Hands = (TextView) v.findViewById(R.id.tvHands);
+	                Type = (TextView) v.findViewById(R.id.tvType);
+	                ID = (TextView) v.findViewById(R.id.tvID);
+	                Damage = (TextView) v.findViewById(R.id.tvDamage);
+	                Quantity = (TextView)v.findViewById(R.id.tvStock);
 	                
 
 	                if(Title != null)
 	                {
-	                	Title.setText(item.getString("date"));
-	                	Hands.setText(item.getString("tempMaxF") );
+	                	Title.setText(item.getString("name"));
+	                	Hands.setText(item.getString("hands"));
+	                	Type.setText(item.getString("type"));
+	                	ID.setText(item.getString("ID"));
+	                	Damage.setText(item.getString("damage"));
+	                	Quantity.setText(item.getString("quantity"));
 	                
 	                }
 	            }else{

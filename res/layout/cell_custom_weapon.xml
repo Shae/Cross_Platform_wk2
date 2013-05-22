@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="#64cd46"
+    android:gravity="right" >
+
+    <TextView
+        android:id="@+id/tvWepName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:text="Default Title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tvTypeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvWepName"
+        android:layout_below="@+id/tvWepName"
+        android:layout_marginTop="2dp"
+        android:text="Type:"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvTypeTitle"
+        android:layout_below="@+id/tvTypeTitle"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:text="Hands:"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/tvType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView4"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/tvTypeTitle"
+        android:text="00"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/tvHands"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView4"
+        android:layout_alignBottom="@+id/textView4"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/textView4"
+        android:text="00"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+		    <TextView
+		        android:id="@+id/tvID"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentRight="true"
+		        android:layout_alignTop="@+id/tvWepName"
+		        android:layout_marginRight="25dp"
+		        android:text="0000"
+		        android:textAppearance="?android:attr/textAppearanceSmall" />
+		
+		<LinearLayout
+		    android:id="@+id/ll_dam_stock"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_below="@+id/tvID"
+		    android:layout_marginRight="20dp"
+		    android:background="@android:color/darker_gray"
+		    android:orientation="vertical" >
+        
+		<LinearLayout
+		android:id="@+id/ll_dam"
+    	android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        	<TextView
+        	    android:id="@+id/textView8"
+        	    android:layout_width="wrap_content"
+        	    android:layout_height="wrap_content"
+        	    android:layout_marginRight="5dp"
+        	    android:layout_marginLeft="5dp"
+        	    android:layout_marginTop="4dp"
+        	    android:text="Damage:"
+        	    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+		    <TextView
+		        android:id="@+id/tvDamage"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginRight="10dp"
+		        android:layout_marginTop="4dp"
+		        android:text="000"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+		    
+		</LinearLayout>
+		
+		<LinearLayout
+		android:id="@+id/ll_stock"
+    	android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        
+        android:orientation="horizontal">
+		    
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="4dp"
+            android:text="In Stock:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+		    
+        <TextView
+            android:id="@+id/tvStock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="4dp"
+            android:text="00"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+		</LinearLayout>
+        
+
+        
+
+    </LinearLayout>
+
+		<TextView
+		    android:id="@+id/textView3"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignBottom="@+id/tvID"
+		    android:layout_marginRight="5dp"
+		    android:layout_toLeftOf="@+id/tvID"
+		    android:text="ID:"
+		    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>
