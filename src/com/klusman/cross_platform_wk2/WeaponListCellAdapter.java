@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class WeaponListCellAdapter extends ArrayAdapter<Weapon>{
+public class WeaponListCellAdapter extends ArrayAdapter<Weapon> {
 
 	private static final String TAG = "WEAPONS_DATABASE";
 	Context _context;
@@ -39,12 +42,12 @@ public class WeaponListCellAdapter extends ArrayAdapter<Weapon>{
 		TextView tvdamage = (TextView) rowView.findViewById(R.id.tvDamage);
 		TextView tvquantity = (TextView) rowView.findViewById(R.id.tvStock);
 
-		String name = _weaponList.get(position).getName();
-		String id = String.valueOf(_weaponList.get(position).getId());
-		String type = String.valueOf(_weaponList.get(position).getType());
-		String hands = String.valueOf(_weaponList.get(position).getHands());
-		String dam = String.valueOf(_weaponList.get(position).getDamage());
-		String quant = String.valueOf(_weaponList.get(position).getQuantity());
+		final String name = _weaponList.get(position).getName();
+		final String id = String.valueOf(_weaponList.get(position).getId());
+		final String type = String.valueOf(_weaponList.get(position).getType());
+		final String hands = String.valueOf(_weaponList.get(position).getHands());
+		final String dam = String.valueOf(_weaponList.get(position).getDamage());
+		final String quant = String.valueOf(_weaponList.get(position).getQuantity());
 	
 		tvname.setText(name);
 		tvid.setText(id);
@@ -52,8 +55,26 @@ public class WeaponListCellAdapter extends ArrayAdapter<Weapon>{
 		tvtype.setText(type);
 		tvdamage.setText(dam);
 		tvquantity.setText(quant);
+		
+		rowView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				//Toast.makeText(getContext(),name,Toast.LENGTH_SHORT).show();
 
+				Intent intent = new Intent(_context, MoreInfoActivity.class);
+				intent.putExtra("ID", id);
+				intent.putExtra("NAME", name);
+				intent.putExtra("TYPE", type);
+				intent.putExtra("HANDS", hands);
+				intent.putExtra("DAMAGE", dam);
+				intent.putExtra("QUANTITY", quant);	
+				_context.startActivity(intent);
+				
+			}
+		});
 
 		return rowView;
 	}
+	
 }

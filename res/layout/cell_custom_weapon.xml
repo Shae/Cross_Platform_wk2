@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:background="#64cd46"
+    android:background="#000000"
     android:gravity="right" >
 
     <TextView
@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvWepName"
         android:layout_below="@+id/tvWepName"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="2dp"
         android:text="Type:"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -34,6 +35,7 @@
         android:layout_alignLeft="@+id/tvTypeTitle"
         android:layout_below="@+id/tvTypeTitle"
         android:layout_marginBottom="5dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:text="Hands:"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -72,7 +74,7 @@
 		
 		<LinearLayout
 		    android:id="@+id/ll_dam_stock"
-		    android:layout_width="wrap_content"
+		    android:layout_width="150dp"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentRight="true"
 		    android:layout_below="@+id/tvID"
@@ -103,7 +105,7 @@
 		        android:layout_height="wrap_content"
 		        android:layout_marginRight="10dp"
 		        android:layout_marginTop="4dp"
-		        android:text="000"
+		        android:text="00"
 		        android:textAppearance="?android:attr/textAppearanceMedium" />
 		    
 		</LinearLayout>
@@ -122,7 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:layout_marginTop="4dp"
-            android:text="In Stock:"
+            android:text="Quantity:"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 		    
         <TextView
@@ -149,6 +151,6 @@
 		    android:layout_marginRight="5dp"
 		    android:layout_toLeftOf="@+id/tvID"
 		    android:text="ID:"
-		    android:textAppearance="?android:attr/textAppearanceMedium" />
+		    android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>
