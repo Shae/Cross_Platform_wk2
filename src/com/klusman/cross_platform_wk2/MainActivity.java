@@ -82,7 +82,6 @@ public class MainActivity extends Activity {
 			createTypesData();
 		}
 
-
 		buildRadioGrp();
 		buildSpinner();
 		// buildParseData();  // TO AUTO FILL PARSE.COM
@@ -363,7 +362,7 @@ public class MainActivity extends Activity {
 		weapons = datasourceWeapon.preFilterALL("weaponID");  // reset data to all
 	}
 
-	private void deleteDB(){
+	private void deleteDB(){  // To clear local DB and refresh everything
 		this.deleteDatabase(WeaponsDBOpenHelper.DATABASE_NAME);
 		Log.i(TAG, "DATABASE DELETED AS REQUESTED : LINE 53");
 	}

@@ -19,6 +19,7 @@ public class WeaponListCellAdapter extends ArrayAdapter<Weapon> {
 	private static final String TAG = "WEAPONS_DATABASE";
 	Context _context;
 	private List<Weapon> _weaponList ;
+	int quantity;
 	
 	public WeaponListCellAdapter(Context context, List<Weapon> weapons) {
 		super(context, R.layout.cell_custom_weapon, weapons);
@@ -41,6 +42,7 @@ public class WeaponListCellAdapter extends ArrayAdapter<Weapon> {
 		TextView tvtype = (TextView) rowView.findViewById(R.id.tvType);
 		TextView tvdamage = (TextView) rowView.findViewById(R.id.tvDamage);
 		TextView tvquantity = (TextView) rowView.findViewById(R.id.tvStock);
+		TextView tvquantityTitle = (TextView) rowView.findViewById(R.id.textView10);
 
 		final String name = _weaponList.get(position).getName();
 		final String id = String.valueOf(_weaponList.get(position).getId());
@@ -48,7 +50,32 @@ public class WeaponListCellAdapter extends ArrayAdapter<Weapon> {
 		final String hands = String.valueOf(_weaponList.get(position).getHands());
 		final String dam = String.valueOf(_weaponList.get(position).getDamage());
 		final String quant = String.valueOf(_weaponList.get(position).getQuantity());
+		
 	
+		try {
+			quantity = Integer.parseInt(quant);
+		} catch(NumberFormatException nfe) {
+			Log.i(TAG, "Error. WeaponListCellAdapter: String to Int convert");
+		} 
+		
+		if(quantity <= 1){
+			tvquantityTitle.setTextColor(0xffFF0000);
+			tvquantity.setTextColor(0xffFF0000);
+		}
+		if(quantity == 2){
+			tvquantityTitle.setTextColor(0xffFFCC00);
+			tvquantity.setTextColor(0xffFFCC00);
+		}
+		if(quantity >= 3){
+			tvquantityTitle.setTextColor(0xff00ff00);
+			tvquantity.setTextColor(0xff00ff00);
+		}
+		if(quantity <= 0){
+			tvquantity.setText("OUT OF STOCK");
+			tvquantityTitle.setText("");
+			
+		}
+		
 		tvname.setText(name);
 		tvid.setText(id);
 		tvhands.setText(hands);
@@ -73,7 +100,6 @@ public class WeaponListCellAdapter extends ArrayAdapter<Weapon> {
 				
 			}
 		});
-
 		return rowView;
 	}
 	

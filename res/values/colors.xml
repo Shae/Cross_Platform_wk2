@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sa_green">#14a804</color>
+    <color name="stacked_green">#118504</color>
+    <color name="accent_green">#97e08f</color>
+    <color name="lwd_purple">#660099</color>
+    <color name="lwd_drk_blue">#003399</color>
+    <color name="lwd_lt_blue">#0033ff</color>
+    <color name="black">#000000</color>
+    <color name="red">#f90600</color>
+    <color name="yellow">#e7f900</color>
+    <color name="blue">#0088f9</color>
+    <color name="pink">#b400c7</color>
+</resources>

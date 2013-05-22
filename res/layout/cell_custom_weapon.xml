@@ -79,7 +79,7 @@
 		    android:layout_alignParentRight="true"
 		    android:layout_below="@+id/tvID"
 		    android:layout_marginRight="20dp"
-		    android:background="@android:color/darker_gray"
+		    android:background="@android:color/black"
 		    android:orientation="vertical" >
         
 		<LinearLayout
@@ -103,7 +103,7 @@
 		        android:id="@+id/tvDamage"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_marginRight="10dp"
+		        android:layout_marginRight="5dp"
 		        android:layout_marginTop="4dp"
 		        android:text="00"
 		        android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -131,7 +131,7 @@
             android:id="@+id/tvStock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="5dp"
             android:layout_marginTop="4dp"
             android:text="00"
             android:textAppearance="?android:attr/textAppearanceMedium" />
