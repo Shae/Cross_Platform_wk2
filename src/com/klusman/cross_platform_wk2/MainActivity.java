@@ -13,6 +13,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -42,6 +43,7 @@ public class MainActivity extends Activity {
 	List<Weapon> weapons;
 	List<Weapon> weapons2;
 	ProgressDialog dialog;
+	ProgressDialog dialog2;
 	RadioGroup radioGrp;
 	int selectedRadio;
 	ListView lv;
@@ -66,25 +68,30 @@ public class MainActivity extends Activity {
 		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		dialog.setMessage("Updating Inventory. Please wait...");
 		dialog.setIndeterminate(true);
-
-		// Check to see if there are and Weapons in the list
-		weapons = datasourceWeapon.findAllNoFilter();
-		if(weapons.size() == 0){
-			getParseTable();
-		}
-		weapons2 = datasourceWeapon.filterbyTypeSortby(1, "weaponID");
-		Log.i(TAG, "WEAPONS 2 SIZE: " + String.valueOf(weapons2.size()));
-
-
+		
+		dialog2 = new ProgressDialog(this);
+		dialog2.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		dialog2.setMessage("Loading Inventory...");
+		dialog2.setIndeterminate(true);
+		//buildParseData();  // TO AUTO FILL PARSE.COM
+		
 		// Check to see if there are any Types in the Weapon Types list
 		List<WeaponType> types = datasourceType.findAll();
 		if(types.size() == 0){
 			createTypesData();
 		}
-
+		
 		buildRadioGrp();
 		buildSpinner();
-		// buildParseData();  // TO AUTO FILL PARSE.COM
+
+		// Check to see if there are and Weapons in the list
+		weapons = datasourceWeapon.findAllNoFilter();
+		if(weapons.size() == 0){
+			Log.i(TAG, "Get PARSE table data");
+			get();
+		}
+
+
 
 	} // END onCreate
 
@@ -99,9 +106,10 @@ public class MainActivity extends Activity {
 	////////////////////////////////////////////////////////
 
 	private void listBuilder(){
+		
 		lv = (ListView)findViewById(R.id.list);
 		lv.setAdapter( new WeaponListCellAdapter(this, weapons));
-
+	
 
 	}
 
@@ -123,7 +131,7 @@ public class MainActivity extends Activity {
 					MoveRadioUpdate(spPos, "Alpha");
 					break;
 				default:
-					Log.i(TAG, "Huh?");
+					Log.i(TAG, "ERROR RADIO GROUP FUNCTION");
 					break;
 				}
 			}
@@ -257,58 +265,113 @@ public class MainActivity extends Activity {
 		addWeapon2Parse(4003, "Crossbow", 4, 2, 115, 1);	
 
 	}
-
-	private void getParseTable(){
-		//Log.i(TAG, "OBJECT ID TEST : Step1");
+	
+	private void get(){
 		dialog.show();
-		ParseQuery query = new ParseQuery("weaponsTable");
-		query.findInBackground(
+		ParseQuery q = new ParseQuery("weaponsTablePARSE");
+		q.findInBackground(new FindCallback() {
+			
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				
+			
+				if (e == null) {
+					Log.i(TAG, "OBJECT ID TEST : Step3");
+					int x = objects.size();
 
-				new FindCallback() {
+					for ( int i = 0; i < x; i++){  // Sending Object ID's to kids list
+						Log.i(TAG, "OBJECT BUILD");
+						//String ParseID = objects.get(i).getObjectId().toString();  // to get the actual parse OBJECT ID
+						int _id = (Integer) objects.get(i).get("wID");
+						Log.i(TAG, String.valueOf(_id));
+						String name = (String) objects.get(i).get("wName");
+						Log.i(TAG, name);
+						int type = (Integer) objects.get(i).get("wType");
+						Log.i(TAG, String.valueOf(type));
+						int hands = (Integer) objects.get(i).get("wHands");
+						Log.i(TAG, String.valueOf(hands));
+						int damage = (Integer) objects.get(i).get("wDamage");
+						Log.i(TAG, String.valueOf(damage));
+						int quantity = (Integer) objects.get(i).get("wQuantity");
+						Log.i(TAG, String.valueOf(quantity));
 
-					@Override
-					public void done(List<ParseObject> objects, ParseException e) {
-						if (e == null) {
-							//Log.i(TAG, "OBJECT ID TEST : Step2");
-							int x = objects.size();
+						Weapon weapon = new Weapon();
+						weapon.setId(_id);
+						weapon.setName(name);
+						weapon.setType(type);
+						weapon.setHands(hands);
+						weapon.setDamage(damage);
+						weapon.setQuantity(quantity);
+						weapon = datasourceWeapon.create(weapon);
+						Log.i(TAG, "Weapons created with id " + name);
+					} // end for loop
+			}else {
+				String ee = e.toString();
+				Log.i("ERROR from PARSE", ee);
+			}  // END IF 
+				
+				resetWindow();
+				dialog.dismiss();
+			} // end done
+		}); // end find in BG
+		
+	} // end GET function
 
-							for ( int i = 0; i < x; i++){  // Sending Object ID's to kids list
-								Log.i(TAG, "OBJECT BUILD");
-								//String o = objects.get(i).getObjectId().toString();  // to get the actual parse OBJECT ID
-								int _id = (Integer) objects.get(i).get("wID");
-								//Log.i(TAG, String.valueOf(_id));
-								String name = (String) objects.get(i).get("wName");
-								//Log.i(TAG, name);
-								int type = (Integer) objects.get(i).get("wType");
-								//Log.i(TAG, String.valueOf(type));
-								int hands = (Integer) objects.get(i).get("wHands");
-								//Log.i(TAG, String.valueOf(hands));
-								int damage = (Integer) objects.get(i).get("wDamage");
-								//Log.i(TAG, String.valueOf(damage));
-								int quantity = (Integer) objects.get(i).get("wQuantity");
-								//Log.i(TAG, String.valueOf(quantity));
-
-								Weapon weapon = new Weapon();
-								weapon.setId(_id);
-								weapon.setName(name);
-								weapon.setType(type);
-								weapon.setHands(hands);
-								weapon.setDamage(damage);
-								weapon.setQuantity(quantity);
-								weapon = datasourceWeapon.create(weapon);
-								//Log.i(TAG, "Weapons created with id " + name);
-
-							} // END FOR LOOP
-
-						} else {
-							String ee = e.toString();
-							Log.i("ERROR from PARSE", ee);
-						}  // END IF
-						resetWindow();
-						dialog.dismiss();
-					}
-				});
-	}  // END getParseTable
+//	private void getParseTable(){
+//		Log.i(TAG, "OBJECT ID TEST : Step1");
+//		dialog.show();
+//		
+//			ParseQuery query = new ParseQuery("weaponsTablePARSE");
+//			Log.i(TAG, "OBJECT ID TEST : Step1.1");
+//			query.findInBackground(
+//					new FindCallback() {
+//						
+//						@Override
+//						public void done(List<ParseObject> objects,
+//								ParseException e) {
+//							Log.i(TAG, "OBJECT ID TEST : Step2");
+//							if (e == null) {
+//								Log.i(TAG, "OBJECT ID TEST : Step3");
+//								int x = objects.size();
+//
+//								for ( int i = 0; i < x; i++){  // Sending Object ID's to kids list
+//									Log.i(TAG, "OBJECT BUILD");
+//									//String ParseID = objects.get(i).getObjectId().toString();  // to get the actual parse OBJECT ID
+//									int _id = (Integer) objects.get(i).get("wID");
+//									Log.i(TAG, String.valueOf(_id));
+//									String name = (String) objects.get(i).get("wName");
+//									Log.i(TAG, name);
+//									int type = (Integer) objects.get(i).get("wType");
+//									Log.i(TAG, String.valueOf(type));
+//									int hands = (Integer) objects.get(i).get("wHands");
+//									Log.i(TAG, String.valueOf(hands));
+//									int damage = (Integer) objects.get(i).get("wDamage");
+//									Log.i(TAG, String.valueOf(damage));
+//									int quantity = (Integer) objects.get(i).get("wQuantity");
+//									Log.i(TAG, String.valueOf(quantity));
+//
+//									Weapon weapon = new Weapon();
+//									weapon.setId(_id);
+//									weapon.setName(name);
+//									weapon.setType(type);
+//									weapon.setHands(hands);
+//									weapon.setDamage(damage);
+//									weapon.setQuantity(quantity);
+//									weapon = datasourceWeapon.create(weapon);
+//									Log.i(TAG, "Weapons created with id " + name);
+//
+//								} // END FOR LOOP
+//
+//							} else {
+//								String ee = e.toString();
+//								Log.i("ERROR from PARSE", ee);
+//							}  // END IF
+//							resetWindow();
+//							dialog.dismiss();
+//						}
+//					});
+//		
+//	}  // END getParseTable
 
 	private void MoveRadioUpdate(int pos, String sort){
 		switch(pos){
@@ -347,7 +410,7 @@ public class MainActivity extends Activity {
 
 	public void addWeapon2Parse(int id, String name, int type, int hands, int damage, int quantity){
 		Log.i("TAG", "Weapon " + name + " being saved to PARSE");
-		ParseObject wepObject = new ParseObject("weaponsTable");
+		ParseObject wepObject = new ParseObject("weaponsTablePARSE");
 		wepObject.put("wID", id);
 		wepObject.put("wName", name);
 		wepObject.put("wType", type);
@@ -359,12 +422,14 @@ public class MainActivity extends Activity {
 
 	private void resetWindow(){	//Used in the getParseTable Function
 		sp.setSelection(0);  // reset Spinner to all
-		weapons = datasourceWeapon.preFilterALL("weaponID");  // reset data to all
+		weapons = datasourceWeapon.preFilterALL("ID");  // reset data to all
+		Log.i(TAG, "REFRESH WEAPON DATA");
+		listBuilder();
 	}
 
 	private void deleteDB(){  // To clear local DB and refresh everything
 		this.deleteDatabase(WeaponsDBOpenHelper.DATABASE_NAME);
-		Log.i(TAG, "DATABASE DELETED AS REQUESTED : LINE 53");
+		Log.i(TAG, "DATABASE DELETED AS REQUESTED : LINE 372");
 	}
 
 
