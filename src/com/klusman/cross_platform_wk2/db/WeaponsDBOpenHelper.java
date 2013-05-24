@@ -1,5 +1,6 @@
 package com.klusman.cross_platform_wk2.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,6 +13,7 @@ public class WeaponsDBOpenHelper extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 	
 	public static final String TABLE_WEAPONS = "wpnsTable";
+	public static final String COLUMN_PARSEID = "parseID";
 	public static final String COLUMN_ID = "weaponID";
 	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_TYPE = "type";
@@ -24,8 +26,9 @@ public class WeaponsDBOpenHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_TYPE_NAME = "typeName";
 
 	
-	private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_WEAPONS + " (" +
+	public static final String TABLE_CREATE = "CREATE TABLE " + TABLE_WEAPONS + " (" +
 			COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+			COLUMN_PARSEID + " TEXT NOT NULL, " +
 			COLUMN_NAME + " TEXT NOT NULL, " +
 			COLUMN_TYPE + " INTEGER NOT NULL, " +
 			COLUMN_HANDS + " INTEGER NOT NULL, " +
@@ -50,9 +53,8 @@ public class WeaponsDBOpenHelper extends SQLiteOpenHelper {
 		
 		db.execSQL(TABLE_CREATE);
 		Log.i(TAG, DATABASE_NAME + "Table has been created");
-		
-
 	}
+
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvWepName"
         android:layout_below="@+id/tvWepName"
+        android:layout_marginLeft="15dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="2dp"
         android:text="Type:"

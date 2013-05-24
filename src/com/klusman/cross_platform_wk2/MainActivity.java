@@ -6,6 +6,7 @@ import java.util.List;
 import com.klusman.cross_platform_wk2.db.TypeDataSource;
 import com.klusman.cross_platform_wk2.db.WeaponDataSource;
 import com.klusman.cross_platform_wk2.db.WeaponsDBOpenHelper;
+import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
@@ -90,16 +91,8 @@ public class MainActivity extends Activity {
 			Log.i(TAG, "Get PARSE table data");
 			get();
 		}
-
-
-
 	} // END onCreate
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}   
 
 	////////////////////////////////////////////////////////
 	///////////////////  FORM BUILDERS ///////////////////// 
@@ -212,6 +205,8 @@ public class MainActivity extends Activity {
 		super.onResume();
 		datasourceType.open();
 		datasourceWeapon.open();	
+		resetWindow();
+		countParse();
 	}
 
 	@Override
@@ -273,19 +268,19 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
-				
-			
 				if (e == null) {
 					Log.i(TAG, "OBJECT ID TEST : Step3");
 					int x = objects.size();
 
 					for ( int i = 0; i < x; i++){  // Sending Object ID's to kids list
 						Log.i(TAG, "OBJECT BUILD");
-						//String ParseID = objects.get(i).getObjectId().toString();  // to get the actual parse OBJECT ID
+						String ParseID = objects.get(i).getObjectId().toString();  // to get the actual parse OBJECT ID
 						int _id = (Integer) objects.get(i).get("wID");
 						Log.i(TAG, String.valueOf(_id));
 						String name = (String) objects.get(i).get("wName");
-						Log.i(TAG, name);
+						//String parseID = (String) objects.get(i).get("objectId");
+						
+						Log.i(TAG, ParseID);
 						int type = (Integer) objects.get(i).get("wType");
 						Log.i(TAG, String.valueOf(type));
 						int hands = (Integer) objects.get(i).get("wHands");
@@ -296,6 +291,7 @@ public class MainActivity extends Activity {
 						Log.i(TAG, String.valueOf(quantity));
 
 						Weapon weapon = new Weapon();
+						weapon.setParseId(ParseID);
 						weapon.setId(_id);
 						weapon.setName(name);
 						weapon.setType(type);
@@ -303,75 +299,17 @@ public class MainActivity extends Activity {
 						weapon.setDamage(damage);
 						weapon.setQuantity(quantity);
 						weapon = datasourceWeapon.create(weapon);
-						Log.i(TAG, "Weapons created with id " + name);
+						Log.i(TAG, "Weapons created " + name + ", parseId: " + ParseID);
 					} // end for loop
 			}else {
 				String ee = e.toString();
 				Log.i("ERROR from PARSE", ee);
 			}  // END IF 
-				
 				resetWindow();
 				dialog.dismiss();
 			} // end done
-		}); // end find in BG
-		
+		}); // end find in BG	
 	} // end GET function
-
-//	private void getParseTable(){
-//		Log.i(TAG, "OBJECT ID TEST : Step1");
-//		dialog.show();
-//		
-//			ParseQuery query = new ParseQuery("weaponsTablePARSE");
-//			Log.i(TAG, "OBJECT ID TEST : Step1.1");
-//			query.findInBackground(
-//					new FindCallback() {
-//						
-//						@Override
-//						public void done(List<ParseObject> objects,
-//								ParseException e) {
-//							Log.i(TAG, "OBJECT ID TEST : Step2");
-//							if (e == null) {
-//								Log.i(TAG, "OBJECT ID TEST : Step3");
-//								int x = objects.size();
-//
-//								for ( int i = 0; i < x; i++){  // Sending Object ID's to kids list
-//									Log.i(TAG, "OBJECT BUILD");
-//									//String ParseID = objects.get(i).getObjectId().toString();  // to get the actual parse OBJECT ID
-//									int _id = (Integer) objects.get(i).get("wID");
-//									Log.i(TAG, String.valueOf(_id));
-//									String name = (String) objects.get(i).get("wName");
-//									Log.i(TAG, name);
-//									int type = (Integer) objects.get(i).get("wType");
-//									Log.i(TAG, String.valueOf(type));
-//									int hands = (Integer) objects.get(i).get("wHands");
-//									Log.i(TAG, String.valueOf(hands));
-//									int damage = (Integer) objects.get(i).get("wDamage");
-//									Log.i(TAG, String.valueOf(damage));
-//									int quantity = (Integer) objects.get(i).get("wQuantity");
-//									Log.i(TAG, String.valueOf(quantity));
-//
-//									Weapon weapon = new Weapon();
-//									weapon.setId(_id);
-//									weapon.setName(name);
-//									weapon.setType(type);
-//									weapon.setHands(hands);
-//									weapon.setDamage(damage);
-//									weapon.setQuantity(quantity);
-//									weapon = datasourceWeapon.create(weapon);
-//									Log.i(TAG, "Weapons created with id " + name);
-//
-//								} // END FOR LOOP
-//
-//							} else {
-//								String ee = e.toString();
-//								Log.i("ERROR from PARSE", ee);
-//							}  // END IF
-//							resetWindow();
-//							dialog.dismiss();
-//						}
-//					});
-//		
-//	}  // END getParseTable
 
 	private void MoveRadioUpdate(int pos, String sort){
 		switch(pos){
@@ -420,6 +358,30 @@ public class MainActivity extends Activity {
 		wepObject.saveInBackground();
 	}
 
+	public void countParse(){
+		ParseQuery query = new ParseQuery("weaponsTablePARSE");
+		query.whereExists("wID");
+		query.countInBackground(new CountCallback() {
+		  public void done(int count, ParseException e) {
+		    if (e == null) {
+		      // The count request succeeded. Log the count
+		      Log.i(TAG, "TOTAL PARSE ROWS: " + count );
+		      if(count <= weapons.size()){
+		    	  Log.i(TAG, "Parse count: " + count + " Local Count: " +  weapons.size());
+		    	  Log.i(TAG, "NUMBERS DIF");
+		    	  deleteDBandRebuild();
+		      }else if(count >= weapons.size()){
+		    	  Log.i(TAG, "Parse count: " + count + " Local Count: " +  weapons.size());
+		    	  Log.i(TAG, "NUMBERS DIF");
+		    	  get();
+		      }
+		    } else {
+		      // The request failed
+		    }
+		  }
+		});
+	}
+	
 	private void resetWindow(){	//Used in the getParseTable Function
 		sp.setSelection(0);  // reset Spinner to all
 		weapons = datasourceWeapon.preFilterALL("ID");  // reset data to all
@@ -429,157 +391,21 @@ public class MainActivity extends Activity {
 
 	private void deleteDB(){  // To clear local DB and refresh everything
 		this.deleteDatabase(WeaponsDBOpenHelper.DATABASE_NAME);
-		Log.i(TAG, "DATABASE DELETED AS REQUESTED : LINE 372");
+		Log.i(TAG, "DATABASE DELETED AS REQUESTED : LINE 391");
 	}
 
-
+	private void deleteDBandRebuild(){
+		datasourceWeapon.deleteTableAndRebuild();
+		get();
+		
+	}
 	////////////////////////////////////////////////////////
 	//////////////////  OLD TRASH CODE   ///////////////////
 	////////////////////////////////////////////////////////
 
 	private void oldTrashData(){
 
-		//table.removeAllViews();  // clear table views	
-
-		//////////////////////////////   	
-		//  TABLE VIEW REMOVED
-		//   private void tableBuilder(){
-		//   	   	table = (TableLayout) findViewById(R.id.tableLoyout);
-		//   	   	//Log.i(TAG, "Weapon list size: " + String.valueOf(weapons.size()));
-		//   	   	LayoutParams T_params = new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f);
-		//   	   	LayoutParams T_params2 = new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 2f);
-		//   	   	
-		//   	   
-		//   	   /////  TITLE ROW  /////
-		//   	   	TableRow titlerow = new TableRow(this);
-		//   	   	TextView t11 = new TextView(this);
-		//   	   	t11.setLayoutParams(T_params);
-		//   	   	TextView t21 = new TextView(this);
-		//   	   	t21.setLayoutParams(T_params2);
-		//   	   	TextView t31 = new TextView(this);
-		//   	   	t31.setLayoutParams(T_params);
-		//     		TextView t41 = new TextView(this);
-		//     		t41.setLayoutParams(T_params);
-		//     		TextView t51 = new TextView(this);
-		//     		t51.setLayoutParams(T_params);
-		//     		TextView t61 = new TextView(this);
-		//     		t61.setLayoutParams(T_params);
-		//     		
-		//     		t11.setText("ID");		
-		//   		t21.setText("NAME");
-		//   		t31.setText("TYPE");
-		//   		t41.setText("HANDS");
-		//   		t51.setText("DMG");
-		//   		t61.setText("QTY");
-		//     		
-		//   		titlerow.addView(t11);
-		//   		titlerow.addView(t21);
-		//   		titlerow.addView(t31);
-		//   		titlerow.addView(t41);
-		//   		titlerow.addView(t51);
-		//   		titlerow.addView(t61);
-		//   		
-		//   	   table.addView(titlerow,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		//   	   
-		//   	   
-		//   	   //////  TABLE DATA  //////
-		//   	   
-		//
-		//   		for (int i = 0; i < weapons.size(); i++) {
-		//   			Weapon wpn = weapons.get(i);
-		//
-		//   			LayoutParams params = new TableRow.LayoutParams(0,
-		//   					LayoutParams.WRAP_CONTENT, 1f);
-		//   			LayoutParams params2 = new TableRow.LayoutParams(0,
-		//   					LayoutParams.WRAP_CONTENT, 2f);
-		//   			// create a new TableRow
-		//   			TableRow row = new TableRow(this);
-		//
-		//   			// create a new TextView
-		//
-		//   			TextView t1 = new TextView(this);
-		//   			t1.setLayoutParams(params);
-		//   			TextView t2 = new TextView(this);
-		//   			t2.setLayoutParams(params2);
-		//   			TextView t3 = new TextView(this);
-		//   			t3.setLayoutParams(params);
-		//   			TextView t4 = new TextView(this);
-		//   			t4.setLayoutParams(params);
-		//   			TextView t5 = new TextView(this);
-		//   			t5.setLayoutParams(params);
-		//   			TextView t6 = new TextView(this);
-		//   			t6.setLayoutParams(params);
-		//
-		//   			t1.setText(String.valueOf(wpn.getId()));
-		//   			t2.setText(wpn.getName());
-		//   			t3.setText(String.valueOf(wpn.getType()));
-		//   			t4.setText(String.valueOf(wpn.getHands()));
-		//   			t5.setText(String.valueOf(wpn.getDamage()));
-		//   			t6.setText(String.valueOf(wpn.getQuantity()));
-		//
-		//   			// add the TextView and the CheckBox to the new TableRow
-		//   			row.addView(t1);
-		//   			row.addView(t2);
-		//   			row.addView(t3);
-		//   			row.addView(t4);
-		//   			row.addView(t5);
-		//   			row.addView(t6);
-		//
-		//   			// add the TableRow to the TableLayout
-		//   			table.addView(row, new TableLayout.LayoutParams(
-		//   					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		//   		}
-		//
-		//   };
-
-
-		///////////////////////////
-
-		//    	private void MoveRadioUpdate(int pos, String sort){
-		//        	switch(pos){
-		//
-		//    	    case 0: 
-		//    	    	Log.i(TAG, "Radio Updated to: " + sort);
-		//    	    	weapons = datasourceWeapon.preFilterALL(sort);
-		//    	    	//table.removeAllViews();   	
-		//    	    	//tableBuilder();
-		//    	    	
-		//    	        break;
-		//
-		//    	    case 1:
-		//    	    	Log.i(TAG, "Radio Updated to: " + sort);
-		//    	    	weapons = datasourceWeapon.preFilterByType(1, sort);
-		//    	    	//table.removeAllViews();
-		//    	    	//tableBuilder();
-		//    	    	
-		//    	        break;
-		//    	         
-		//    	    case 2:
-		//    	    	Log.i(TAG, "Radio Updated to: " + sort);
-		//    	    	weapons = datasourceWeapon.preFilterByType(2, sort);
-		//    	    	//table.removeAllViews();
-		//    	    	//tableBuilder();
-		//    	    	
-		//    	        break;
-		//    	         
-		//    	    case 3:
-		//    	    	Log.i(TAG, "Radio Updated to: " + sort);
-		//    	    	weapons = datasourceWeapon.preFilterByType(3, sort);
-		//    	    	//table.removeAllViews();
-		//    	    	//tableBuilder();
-		//    	    	
-		//    	        break;
-		//    	         	
-		//    	    case 4:
-		//    	    	Log.i(TAG, "Radio Updated to: " + sort);
-		//    	    	weapons = datasourceWeapon.preFilterByType(4, sort);
-		//    	    	//table.removeAllViews();
-		//    	    	//tableBuilder();
-		//    	    	
-		//    	        break;
-		//    	    }
-		//        }
-
+	
 	}
 
 }

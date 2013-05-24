@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/etWepID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Weapon ID: XXXX"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/etWepName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="Weapon Name" >
+    </EditText>
+
+    <RadioGroup
+        android:id="@+id/radioGrpNew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radioSword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:checked="true"
+            android:text="Sword" />
+
+        <RadioButton
+            android:id="@+id/radioAxe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="Axe" />
+
+        <RadioButton
+            android:id="@+id/radioFlail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="Flail" />
+        
+                <RadioButton
+            android:id="@+id/radioBow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="Bow" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/radioGrpHands"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radio1H"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:checked="true"
+            android:text="1 Handed" />
+
+        <RadioButton
+            android:id="@+id/radio2H"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:text="2 Handed" />
+
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/etWepDamage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="Weapon Damage"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/etWepStock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="# In Stock"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/btnWepSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="60dp"
+        android:text="Save Weapon" />
+
+</LinearLayout>

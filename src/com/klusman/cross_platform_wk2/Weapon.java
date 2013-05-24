@@ -8,7 +8,16 @@ public class Weapon {
 	    public int hands;
 	    public int damage;
 	    public int quantity;
+	    public String parseID;
 
+//////////////
+		public String getParseId(){
+		return parseID;
+		}
+		
+		public void setParseId(String pID){
+		this.parseID = pID;
+		}
 	    
 //////////////	    
 	    public long getId(){
