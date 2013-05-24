@@ -1,6 +1,5 @@
 package com.klusman.cross_platform_wk2;
 
-import com.klusman.cross_platform_wk2.db.WeaponDataSource;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseObject;
@@ -188,15 +187,16 @@ public class AddWeaponActivity extends Activity {
 		wepObject.put("wDamage", damage);
 		wepObject.put("wQuantity", quantity);
 		wepObject.saveInBackground();
-	}
-	
-	private void pushNewWep(long longID, String name, int type, int hands, int damage, int inStock){
-		WeaponDataSource updt = new WeaponDataSource(context);
-		updt.open();
-		updt.PushNewWeaponToLocal(longID, name, type, hands, damage, inStock);
-		updt.close();			
 		AddWeaponActivity.this.finish();
 	}
+	
+//	private void pushNewWep(long longID, String name, int type, int hands, int damage, int inStock){
+//		WeaponDataSource updt = new WeaponDataSource(context);
+//		updt.open();
+//		updt.PushNewWeaponToLocal(longID, name, type, hands, damage, inStock);
+//		updt.close();			
+//		AddWeaponActivity.this.finish();
+//	}
 	
 	
 	public void myToast(String text){  

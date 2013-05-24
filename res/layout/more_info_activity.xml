@@ -1,89 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
-    <LinearLayout 
+    <LinearLayout
         android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="right"
-    android:orientation="vertical">
-        
-    <TextView
-        android:id="@+id/infoID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Small Text"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/infoType"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="right"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-        
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/infoID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Small Text"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/infoType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceSmall" 
+            tools:ignore="HardcodedText" />
     </LinearLayout>
-<LinearLayout 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
-    
-    
-    
-    <TextView
-        android:id="@+id/infoName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:gravity="center_horizontal"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="40sp" />
 
-    <TextView
-        android:id="@+id/infoHands"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/infoName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center_horizontal"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/infoDamage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/infoHands"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="19dp"
-        android:gravity="center_horizontal"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:id="@+id/infoName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="40sp" 
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/infoQuant"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:gravity="center_horizontal"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/infoHands"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" 
+            tools:ignore="HardcodedText" />
 
-    <Button
-        android:id="@+id/btnBasket"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/infoQuant"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="36dp"
-        android:text="Purchase" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/infoDamage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:gravity="center_horizontal"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" 
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/infoQuant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center_horizontal"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" 
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btnBasket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="Purchase" 
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -2,7 +2,6 @@ package com.klusman.cross_platform_wk2;
 
 
 import com.klusman.cross_platform_wk2.db.WeaponDataSource;
-import com.klusman.cross_platform_wk2.db.WeaponsDBOpenHelper;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
@@ -13,7 +12,6 @@ import com.parse.SaveCallback;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,7 +38,7 @@ public class MoreInfoActivity extends Activity {
 	long longID;
 	SQLiteOpenHelper dbHelper;
 	SQLiteDatabase database;
-    private SQLiteDatabase db;
+
 
 	TextView _name ;
 	TextView _id ;

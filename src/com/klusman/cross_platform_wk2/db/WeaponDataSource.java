@@ -3,7 +3,6 @@ package com.klusman.cross_platform_wk2.db;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.klusman.cross_platform_wk2.MoreInfoActivity;
 import com.klusman.cross_platform_wk2.Weapon;
 
 import android.content.ContentValues;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -11,7 +12,8 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Weapon ID: XXXX"
-        android:inputType="number" />
+        android:inputType="number"
+        tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/etWepName"
@@ -19,7 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:ems="10"
-        android:hint="Weapon Name" >
+        android:hint="Weapon Name" 
+        tools:ignore="HardcodedText" >
     </EditText>
 
     <RadioGroup
@@ -38,7 +41,8 @@
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             android:checked="true"
-            android:text="Sword" />
+            android:text="Sword" 
+            tools:ignore="HardcodedText" />
 
         <RadioButton
             android:id="@+id/radioAxe"
@@ -46,7 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:text="Axe" />
+            android:text="Axe" 
+            tools:ignore="HardcodedText" />
 
         <RadioButton
             android:id="@+id/radioFlail"
@@ -54,15 +59,17 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:text="Flail" />
-        
-                <RadioButton
+            android:text="Flail" 
+            tools:ignore="HardcodedText" />
+
+        <RadioButton
             android:id="@+id/radioBow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:text="Bow" />
+            android:text="Bow" 
+            tools:ignore="HardcodedText" />
     </RadioGroup>
 
     <RadioGroup
@@ -81,7 +88,8 @@
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             android:checked="true"
-            android:text="1 Handed" />
+            android:text="1 Handed" 
+            tools:ignore="HardcodedText" />
 
         <RadioButton
             android:id="@+id/radio2H"
@@ -89,9 +97,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
-            android:text="2 Handed" />
-
-
+            android:text="2 Handed" 
+            tools:ignore="HardcodedText" />
     </RadioGroup>
 
     <EditText
@@ -101,7 +108,8 @@
         android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="Weapon Damage"
-        android:inputType="number" />
+        android:inputType="number" 
+        tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/etWepStock"
@@ -110,7 +118,8 @@
         android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="# In Stock"
-        android:inputType="number" />
+        android:inputType="number" 
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/btnWepSave"
@@ -118,6 +127,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="60dp"
-        android:text="Save Weapon" />
+        android:text="Save Weapon" 
+        tools:ignore="HardcodedText" />
 
 </LinearLayout>

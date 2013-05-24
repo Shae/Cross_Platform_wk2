@@ -21,7 +21,6 @@ import android.app.ProgressDialog;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -54,7 +53,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main); 
-		//deleteDB();  // TO CLEAR DB AND START OVER
+		deleteDB();  // TO CLEAR DB AND START OVER
 
 		Parse.initialize(this, "KOHAaQRdCYXrO1RNBYF3iTSOoxrgTfXRsFUpMdhN", "P3BgADyELTJe2ZyJFUs5cqabAagdVtg517VG2YHf"); 
 		ParseAnalytics.trackAppOpened(getIntent());
@@ -241,25 +240,6 @@ public class MainActivity extends Activity {
 		type = datasourceType.create(type);
 		//Log.i(TAG, "Type created with id: " + type.getId() + " named: " + type.getName());
 	}
-
-	private void buildParseData(){  // to Populate PARSE.com
-		Parse.initialize(this, "KOHAaQRdCYXrO1RNBYF3iTSOoxrgTfXRsFUpMdhN", "P3BgADyELTJe2ZyJFUs5cqabAagdVtg517VG2YHf"); 
-		addWeapon2Parse(1001, "Long Sword", 1, 1, 45, 5);
-		addWeapon2Parse(1002, "Short Sword", 1, 1, 25, 3);
-		addWeapon2Parse(1003, "Rusty Dagger", 1, 1, 10, 1);
-		addWeapon2Parse(1004, "Great Sword", 1, 2, 90, 1);
-		addWeapon2Parse(2001, "Hatchet", 2, 1, 15, 1);
-		addWeapon2Parse(2002, "Hand Axe", 2, 1, 30, 3);
-		addWeapon2Parse(2003, "Beared Axe", 2, 1, 55, 5);
-		addWeapon2Parse(2004, "Great Axe", 2, 2, 95, 1);
-		addWeapon2Parse(3001, "Morning Star", 3, 1, 40, 4);
-		addWeapon2Parse(3002, "Pill Flail", 3, 2, 120, 2);
-		addWeapon2Parse(3003, "Double Flail", 3, 1, 60, 1);
-		addWeapon2Parse(4001, "Short Bow", 4, 2, 45, 3);
-		addWeapon2Parse(4002, "Long Bow", 4, 2, 90, 2);
-		addWeapon2Parse(4003, "Crossbow", 4, 2, 115, 1);	
-
-	}
 	
 	private void get(){
 		dialog.show();
@@ -366,14 +346,11 @@ public class MainActivity extends Activity {
 		    if (e == null) {
 		      // The count request succeeded. Log the count
 		      Log.i(TAG, "TOTAL PARSE ROWS: " + count );
-		      if(count <= weapons.size()){
-		    	  Log.i(TAG, "Parse count: " + count + " Local Count: " +  weapons.size());
+		      Log.i(TAG, "Parse count: " + count + " Local Count: " +  weapons.size());
+		      if(count != weapons.size()){
 		    	  Log.i(TAG, "NUMBERS DIF");
 		    	  deleteDBandRebuild();
-		      }else if(count >= weapons.size()){
-		    	  Log.i(TAG, "Parse count: " + count + " Local Count: " +  weapons.size());
-		    	  Log.i(TAG, "NUMBERS DIF");
-		    	  get();
+		    	  //get();
 		      }
 		    } else {
 		      // The request failed
@@ -391,7 +368,7 @@ public class MainActivity extends Activity {
 
 	private void deleteDB(){  // To clear local DB and refresh everything
 		this.deleteDatabase(WeaponsDBOpenHelper.DATABASE_NAME);
-		Log.i(TAG, "DATABASE DELETED AS REQUESTED : LINE 391");
+		Log.i(TAG, "DATABASE DELETED AS REQUESTED : LINE 371");
 	}
 
 	private void deleteDBandRebuild(){
@@ -403,10 +380,26 @@ public class MainActivity extends Activity {
 	//////////////////  OLD TRASH CODE   ///////////////////
 	////////////////////////////////////////////////////////
 
-	private void oldTrashData(){
 
 	
-	}
+//	private void buildParseData(){  // to Populate PARSE.com
+//		Parse.initialize(this, "KOHAaQRdCYXrO1RNBYF3iTSOoxrgTfXRsFUpMdhN", "P3BgADyELTJe2ZyJFUs5cqabAagdVtg517VG2YHf"); 
+//		addWeapon2Parse(1001, "Long Sword", 1, 1, 45, 5);
+//		addWeapon2Parse(1002, "Short Sword", 1, 1, 25, 3);
+//		addWeapon2Parse(1003, "Rusty Dagger", 1, 1, 10, 1);
+//		addWeapon2Parse(1004, "Great Sword", 1, 2, 90, 1);
+//		addWeapon2Parse(2001, "Hatchet", 2, 1, 15, 1);
+//		addWeapon2Parse(2002, "Hand Axe", 2, 1, 30, 3);
+//		addWeapon2Parse(2003, "Beared Axe", 2, 1, 55, 5);
+//		addWeapon2Parse(2004, "Great Axe", 2, 2, 95, 1);
+//		addWeapon2Parse(3001, "Morning Star", 3, 1, 40, 4);
+//		addWeapon2Parse(3002, "Pill Flail", 3, 2, 120, 2);
+//		addWeapon2Parse(3003, "Double Flail", 3, 1, 60, 1);
+//		addWeapon2Parse(4001, "Short Bow", 4, 2, 45, 3);
+//		addWeapon2Parse(4002, "Long Bow", 4, 2, 90, 2);
+//		addWeapon2Parse(4003, "Crossbow", 4, 2, 115, 1);	
+//
+//	}
 
 }
 
