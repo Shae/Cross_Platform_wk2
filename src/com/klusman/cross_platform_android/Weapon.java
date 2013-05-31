@@ -1,5 +1,8 @@
 package com.klusman.cross_platform_android;
 
+import java.sql.Date;
+
+
 
 public class Weapon {
 	 	public long id;
@@ -9,6 +12,7 @@ public class Weapon {
 	    public int damage;
 	    public int quantity;
 	    public String parseID;
+	    public String updatedAt;
 
 //////////////
 		public String getParseId(){
@@ -72,5 +76,14 @@ public class Weapon {
 	    
 	    public void setQuantity(int quantity){
 	    	this.quantity = quantity;
+	    }
+	    
+////////////
+	    public String getDateUpdated(){
+	    	return updatedAt;
+	    }
+	    
+	    public void setDateUpdated(String updatedAt){
+	    	this.updatedAt = updatedAt;
 	    }
 }  // END WEAPON CLASS

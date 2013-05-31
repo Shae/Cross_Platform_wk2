@@ -26,6 +26,7 @@ public class WeaponDataSource {
 		WeaponsDBOpenHelper.COLUMN_HANDS,
 		WeaponsDBOpenHelper.COLUMN_DAMAGE,
 		WeaponsDBOpenHelper.COLUMN_QUANTITY,
+		WeaponsDBOpenHelper.COLUMN_UPDATEDAT,
 	};
 	
 	public WeaponDataSource(Context context){
@@ -47,19 +48,24 @@ public class WeaponDataSource {
 		Log.i(TAG, "Create Weapon Function in WeaponDataSource");
 		ContentValues values = new ContentValues();
 		values.put(WeaponsDBOpenHelper.COLUMN_ID, weapon.getId());
-		Log.i(TAG, "Create ID : " + String.valueOf(weapon.getId()));
+		//Log.i(TAG, "Create ID : " + String.valueOf(weapon.getId()));
 		values.put(WeaponsDBOpenHelper.COLUMN_PARSEID, weapon.getParseId());
-		Log.i(TAG, "Create PARSEID : " + weapon.getParseId());
+		//Log.i(TAG, "Create PARSEID : " + weapon.getParseId());
 		values.put(WeaponsDBOpenHelper.COLUMN_NAME, weapon.getName());
-		Log.i(TAG, "Create NAME : " + weapon.getName());
+		//Log.i(TAG, "Create NAME : " + weapon.getName());
 		values.put(WeaponsDBOpenHelper.COLUMN_TYPE, weapon.getType());
-		Log.i(TAG, "Create TYPE : " + String.valueOf(weapon.getType()));
+		//Log.i(TAG, "Create TYPE : " + String.valueOf(weapon.getType()));
 		values.put(WeaponsDBOpenHelper.COLUMN_HANDS, weapon.getHands());
-		Log.i(TAG, "Create HANDS : " + String.valueOf(weapon.getHands()));
+		//Log.i(TAG, "Create HANDS : " + String.valueOf(weapon.getHands()));
 		values.put(WeaponsDBOpenHelper.COLUMN_DAMAGE, weapon.getDamage());
-		Log.i(TAG, "Create DAMAGE : " + String.valueOf(weapon.getDamage()));
+		//Log.i(TAG, "Create DAMAGE : " + String.valueOf(weapon.getDamage()));
 		values.put(WeaponsDBOpenHelper.COLUMN_QUANTITY, weapon.getQuantity());
-		Log.i(TAG, "Create QUANTITY : " + String.valueOf(weapon.getQuantity()));
+		//Log.i(TAG, "Create QUANTITY : " + String.valueOf(weapon.getQuantity()));
+		
+		values.put(WeaponsDBOpenHelper.COLUMN_UPDATEDAT, weapon.getDateUpdated());
+		//Log.i(TAG, "Create UPDATED At : " + String.valueOf(weapon.getDateUpdated()));
+		
+		
 		long insertid = database.insert(WeaponsDBOpenHelper.TABLE_WEAPONS, null, values); // GET AUTO ID
 		
 		weapon.setId(insertid); // SET the ID of the new weapon with the Auto generated one
@@ -82,6 +88,7 @@ public class WeaponDataSource {
 				weapon.setHands(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_HANDS)));
 				weapon.setDamage(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_DAMAGE)));
 				weapon.setQuantity(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_QUANTITY)));
+				weapon.setDateUpdated(c.getString(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_UPDATEDAT)));
 				Log.i(TAG, "findAll quantity call : " + c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_QUANTITY)));
 				weapons.add(weapon);
 			}
@@ -117,6 +124,7 @@ public class WeaponDataSource {
 				weapon.setHands(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_HANDS)));
 				weapon.setDamage(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_DAMAGE)));
 				weapon.setQuantity(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_QUANTITY)));
+				weapon.setDateUpdated(c.getString(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_UPDATEDAT)));
 				weaponsByType.add(weapon);
 				//Log.i(TAG, weapon.getName());
 			}
@@ -141,6 +149,7 @@ public class WeaponDataSource {
 				weapon.setHands(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_HANDS)));
 				weapon.setDamage(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_DAMAGE)));
 				weapon.setQuantity(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_QUANTITY)));
+				weapon.setDateUpdated(c.getString(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_UPDATEDAT)));
 				//Log.i(TAG, "findAll quantity call : " + c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_QUANTITY)));
 				weapons.add(weapon);
 			}
@@ -220,6 +229,7 @@ public class WeaponDataSource {
 				weapon.setHands(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_HANDS)));
 				weapon.setDamage(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_DAMAGE)));
 				weapon.setQuantity(c.getInt(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_QUANTITY)));
+				weapon.setDateUpdated(c.getString(c.getColumnIndex(WeaponsDBOpenHelper.COLUMN_UPDATEDAT)));
 				weaponsByType.add(weapon);
 				//Log.i(TAG, weapon.getName());
 			}
@@ -241,7 +251,7 @@ public class WeaponDataSource {
 
 
 	public void PushNewWeaponToLocal(long longID, String name, int type,
-			int hands, int damage, int inStock) {
+			int hands, int damage, int inStock, String updatedAt) {
 		ContentValues cvPush = new ContentValues();
 		cvPush.put(WeaponsDBOpenHelper.COLUMN_ID, longID);
 		cvPush.put(WeaponsDBOpenHelper.COLUMN_NAME, name);
@@ -249,6 +259,7 @@ public class WeaponDataSource {
 		cvPush.put(WeaponsDBOpenHelper.COLUMN_HANDS, hands);
 		cvPush.put(WeaponsDBOpenHelper.COLUMN_DAMAGE, damage);
 		cvPush.put(WeaponsDBOpenHelper.COLUMN_QUANTITY, inStock);
+		cvPush.put(WeaponsDBOpenHelper.COLUMN_UPDATEDAT, updatedAt);
 		database.insert(WeaponsDBOpenHelper.TABLE_WEAPONS, null, cvPush);
 		Log.i(TAG, "PUSH to PARSE DONE: DONE");
 		

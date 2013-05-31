@@ -19,6 +19,7 @@ public class WeaponsDBOpenHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_HANDS = "hands";
 	public static final String COLUMN_DAMAGE = "damage";
 	public static final String COLUMN_QUANTITY = "quantity";
+	public static final String COLUMN_UPDATEDAT = "updatedAt";
 	
 	public static final String TABLE_TYPES = "types";
 	public static final String COLUMN_TYPE_ID = "typeID";
@@ -32,7 +33,8 @@ public class WeaponsDBOpenHelper extends SQLiteOpenHelper {
 			COLUMN_TYPE + " INTEGER NOT NULL, " +
 			COLUMN_HANDS + " INTEGER NOT NULL, " +
 			COLUMN_DAMAGE + " INTEGER NOT NULL, " +
-			COLUMN_QUANTITY + " INTERGER NOT NULL " +
+			COLUMN_QUANTITY + " INTERGER NOT NULL, " +
+			COLUMN_UPDATEDAT + " TEXT " +
 			")";
 			
 	private static final String TABLE_CREATE_TYPE = "CREATE TABLE " + TABLE_TYPES + " (" +

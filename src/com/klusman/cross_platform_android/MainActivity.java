@@ -1,7 +1,10 @@
 package com.klusman.cross_platform_android;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import com.klusman.cross_platform_android.db.TypeDataSource;
 import com.klusman.cross_platform_android.db.WeaponDataSource;
@@ -12,8 +15,11 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.PushService;
+import com.parse.SaveCallback;
 
 
 import android.os.Bundle;
@@ -22,6 +28,7 @@ import android.app.ProgressDialog;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -30,6 +37,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
@@ -57,8 +65,11 @@ public class MainActivity extends Activity {
 		//deleteDB();  // TO CLEAR DB AND START OVER
 
 		Parse.initialize(this, "KOHAaQRdCYXrO1RNBYF3iTSOoxrgTfXRsFUpMdhN", "P3BgADyELTJe2ZyJFUs5cqabAagdVtg517VG2YHf"); 
+		PushService.setDefaultPushCallback(this, MainActivity.class);
+		ParseInstallation.getCurrentInstallation().saveInBackground();
 		ParseAnalytics.trackAppOpened(getIntent());
 
+		
 		datasourceType = new TypeDataSource(this);
 		datasourceType.open();
 		datasourceWeapon = new WeaponDataSource(this);
@@ -102,8 +113,6 @@ public class MainActivity extends Activity {
 		
 		lv = (ListView)findViewById(R.id.list);
 		lv.setAdapter( new WeaponListCellAdapter(this, weapons));
-	
-
 	}
 
 	private void buildRadioGrp(){
@@ -215,6 +224,14 @@ public class MainActivity extends Activity {
 		datasourceType.close();
 		datasourceWeapon.close();
 	}
+	
+	public void myToast(String text){  
+		CharSequence textIN = text;
+		int duration = Toast.LENGTH_SHORT;
+		Toast toast = Toast.makeText(MainActivity.this, textIN, duration);
+		toast.setGravity(Gravity.BOTTOM, 0, 0);
+		toast.show();
+	};// end myToast
 
 	////////////////////////////////////////////////////////
 	/////////////////  DATA MANIPULATION   /////////////////
@@ -250,27 +267,45 @@ public class MainActivity extends Activity {
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
 				if (e == null) {
-					Log.i(TAG, "OBJECT ID TEST : Step3");
+					
 					int x = objects.size();
 
 					for ( int i = 0; i < x; i++){  // Sending Object ID's to kids list
 						Log.i(TAG, "OBJECT BUILD");
+						
 						String ParseID = objects.get(i).getObjectId().toString();  // to get the actual parse OBJECT ID
+						
 						int _id = (Integer) objects.get(i).get("wID");
-						Log.i(TAG, String.valueOf(_id));
+						//Log.i(TAG, String.valueOf(_id));
+						
 						String name = (String) objects.get(i).get("wName");
 						//String parseID = (String) objects.get(i).get("objectId");
 						
-						Log.i(TAG, ParseID);
+						//Log.i(TAG, ParseID);
 						int type = (Integer) objects.get(i).get("wType");
-						Log.i(TAG, String.valueOf(type));
+						//Log.i(TAG, String.valueOf(type));
 						int hands = (Integer) objects.get(i).get("wHands");
-						Log.i(TAG, String.valueOf(hands));
+						//Log.i(TAG, String.valueOf(hands));
 						int damage = (Integer) objects.get(i).get("wDamage");
-						Log.i(TAG, String.valueOf(damage));
+						//Log.i(TAG, String.valueOf(damage));
 						int quantity = (Integer) objects.get(i).get("wQuantity");
-						Log.i(TAG, String.valueOf(quantity));
+						//Log.i(TAG, String.valueOf(quantity));	
+						
+						String dateOf = (String) objects.get(i).getUpdatedAt().toString();
+						SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+						Date dateUpdated = null;
+						try {
+							dateUpdated = format.parse(dateOf);
+							//Log.i(TAG, "*DATED UPDATED: " + String.valueOf(dateUpdated));  //Works
+						} catch (java.text.ParseException e1) {
+							e1.printStackTrace();
+						}
+						
+						String updatedAt = dateUpdated.toString();
 
+						//Log.i(TAG, "updated at : " + String.valueOf(updatedAt));
+
+						
 						Weapon weapon = new Weapon();
 						weapon.setParseId(ParseID);
 						weapon.setId(_id);
@@ -279,8 +314,9 @@ public class MainActivity extends Activity {
 						weapon.setHands(hands);
 						weapon.setDamage(damage);
 						weapon.setQuantity(quantity);
+						weapon.setDateUpdated(updatedAt);
 						weapon = datasourceWeapon.create(weapon);
-						Log.i(TAG, "Weapons created " + name + ", parseId: " + ParseID);
+						//Log.i(TAG, "Weapons created " + name + ", parseId: " + ParseID + ", updated at: " + updatedAt);
 					} // end for loop
 			}else {
 				String ee = e.toString();
@@ -291,7 +327,7 @@ public class MainActivity extends Activity {
 			} // end done
 		}); // end find in BG	
 	} // end GET function
-
+	
 	private void MoveRadioUpdate(int pos, String sort){
 		switch(pos){
 
@@ -328,6 +364,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void addWeapon2Parse(int id, String name, int type, int hands, int damage, int quantity){
+		final String name2 = name;
 		Log.i("TAG", "Weapon " + name + " being saved to PARSE");
 		ParseObject wepObject = new ParseObject("weaponsTablePARSE");
 		wepObject.put("wID", id);
@@ -336,7 +373,15 @@ public class MainActivity extends Activity {
 		wepObject.put("wHands", hands);
 		wepObject.put("wDamage", damage);
 		wepObject.put("wQuantity", quantity);
-		wepObject.saveInBackground();
+		wepObject.saveEventually(new SaveCallback() {
+			
+			@Override
+			public void done(ParseException e) {
+				Log.i("TAG", "Weapon " + name2 + " has been been saved");
+				myToast(name2 + " Saved to Parse Table");
+				
+			}
+		});  // save when connection available
 	}
 
 	public void countParse(){
@@ -383,24 +428,7 @@ public class MainActivity extends Activity {
 
 
 	
-//	private void buildParseData(){  // to Populate PARSE.com
-//		Parse.initialize(this, "KOHAaQRdCYXrO1RNBYF3iTSOoxrgTfXRsFUpMdhN", "P3BgADyELTJe2ZyJFUs5cqabAagdVtg517VG2YHf"); 
-//		addWeapon2Parse(1001, "Long Sword", 1, 1, 45, 5);
-//		addWeapon2Parse(1002, "Short Sword", 1, 1, 25, 3);
-//		addWeapon2Parse(1003, "Rusty Dagger", 1, 1, 10, 1);
-//		addWeapon2Parse(1004, "Great Sword", 1, 2, 90, 1);
-//		addWeapon2Parse(2001, "Hatchet", 2, 1, 15, 1);
-//		addWeapon2Parse(2002, "Hand Axe", 2, 1, 30, 3);
-//		addWeapon2Parse(2003, "Beared Axe", 2, 1, 55, 5);
-//		addWeapon2Parse(2004, "Great Axe", 2, 2, 95, 1);
-//		addWeapon2Parse(3001, "Morning Star", 3, 1, 40, 4);
-//		addWeapon2Parse(3002, "Pill Flail", 3, 2, 120, 2);
-//		addWeapon2Parse(3003, "Double Flail", 3, 1, 60, 1);
-//		addWeapon2Parse(4001, "Short Bow", 4, 2, 45, 3);
-//		addWeapon2Parse(4002, "Long Bow", 4, 2, 90, 2);
-//		addWeapon2Parse(4003, "Crossbow", 4, 2, 115, 1);	
-//
-//	}
+
 
 }
 
